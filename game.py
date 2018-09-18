@@ -1,27 +1,29 @@
-# Space invaders game
-#
+# # Space invaders game
 import pygame
-
-# Initialize the game
 pygame.init()
+
 pygame.display.set_caption('Space Invaders')
-display_width=640
-display_height=480
-display_window=pygame.display.set_mode((display_width, display_height))
+screen = pygame.display.set_mode((1024, 768))
+img = pygame.image.load("Sprites/invader-1.png")
+x = 496
+y = 672
+speed = 10
 
-# Run the game
-def run_game():
-    exit_game = False;
+running = True
+while running:
+    pygame.time.delay(100)
+    for event in pygame.event.get():
+        if pygame.event == pygame.QUIT:
+            running = False
+    keys = pygame.key.get_pressed()
 
-    while not exit_game:
-        # Handle events
-        for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                        exit_game = True
-        # Update the screen
-        pygame.display.flip()
+    if keys[pygame.K_LEFT]:
+        x -= speed
+    if keys[pygame.K_RIGHT]:
+        x += speed
 
-# Run the game
-run_game()
+    screen.fill((0,0,0))
+    screen.blit(img,(x, y))
+    pygame.display.update()
+
 pygame.quit()
-quit()
