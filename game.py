@@ -4,26 +4,64 @@ pygame.init()
 
 pygame.display.set_caption('Space Invaders')
 screen = pygame.display.set_mode((1024, 768))
-img = pygame.image.load("Sprites/invader-1.png")
-x = 496
-y = 672
-speed = 8
+beam = pygame.image.load("Sprites/beam.png")
+
+# Creates a controllable player object
+class Player():
+    def __init__(self, position_x, position_y, speed):
+        self.position_x = position_x
+        self.position_y = position_y
+        self.speed = speed
+        self.sprite = pygame.image.load("Sprites/player.png")
+    
+    def move_left(self):
+        self.position_x -= self.speed 
+    
+    def move_right(self):
+        self.position_x += self.speed 
+
+class Invader():
+    def _init_(self, position, speed, rank):
+        self.position = position
+        self.speed = speed
+
+    def rank():
+        if self.rank ==  1:
+            self.sprite =  pygame.image.load("Sprites/invader-1.png")
+            self.score = 10
+
+        elif self.rank == 2:
+            self.sprite =  pygame.image.load("Sprites/invader-1.png")
+            self.score = 20
+
+        elif self.rank == 3:
+            self.sprite =  pygame.image.load("Sprites/invader-1.png")
+            self.score = 30
+
+def createPlayer():
+    return Player(496, 672, 0.16)
+
+player = createPlayer()
 
 running = True
 while running:
-    pygame.time.delay(100)
+    
     for event in pygame.event.get():
-        if pygame.event == pygame.QUIT:
-            running = False
+            if pygame.event == pygame.QUIT:
+                running = False
+
+    # Define list of possible keys if pressed
     keys = pygame.key.get_pressed()
 
-    if keys[pygame.K_LEFT] and x > speed:
-        x -= speed
-    if keys[pygame.K_RIGHT] and x < 1024 - 72:
-        x += speed
-
+    # If the left or right arrow key is pressed, move player respectively. 
+    if keys[pygame.K_LEFT] and player.position_x > player.speed:
+        player.move_left()
+    if keys[pygame.K_RIGHT] and player.position_x <= 920:
+        player.move_right()
+    
+    # On each cycle of the loop, need to reset background and render the player
     screen.fill((0,0,0))
-    screen.blit(img,(x, y))
+    screen.blit(player.sprite,(player.position_x, player.position_y))
     pygame.display.update()
 
 pygame.quit()
