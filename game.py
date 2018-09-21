@@ -8,6 +8,7 @@ beam = pygame.image.load("Sprites/beam.png")
 
 # Creates a controllable player object
 class Player():
+
     def __init__(self, position_x, position_y, speed):
         self.position_x = position_x
         self.position_y = position_y
@@ -19,6 +20,18 @@ class Player():
     
     def move_right(self):
         self.position_x += self.speed 
+
+    def shoot(self):
+        return Beam(self.position_x, self.position_y)
+
+class Beam():
+    def __init__(self, position_x, position_y):
+        self.position_x = position_x + 48
+        self.speed = self.move(position_y)
+        self.sprite = pygame.image.load("Sprites/beam.png")
+    
+    def move(self, position_y):
+        self.position_y = position_y - 2
 
 class Invader():
     def _init_(self, position, speed, rank):
@@ -41,11 +54,13 @@ class Invader():
 def createPlayer():
     return Player(496, 672, 0.16)
 
-player = createPlayer()
+player = Player(496, 672, 0.16)
 
 running = True
 while running:
     
+    beam = Beam(player.position_x, player.position_y)
+
     for event in pygame.event.get():
             if pygame.event == pygame.QUIT:
                 running = False
@@ -58,10 +73,13 @@ while running:
         player.move_left()
     if keys[pygame.K_RIGHT] and player.position_x <= 920:
         player.move_right()
+    if keys[pygame.K_SPACE]:
+        beam = player.shoot()
     
     # On each cycle of the loop, need to reset background and render the player
     screen.fill((0,0,0))
     screen.blit(player.sprite,(player.position_x, player.position_y))
+    screen.blit(beam.sprite,(beam.position_x, beam.position_y))
     pygame.display.update()
 
 pygame.quit()
