@@ -8,12 +8,12 @@ beam = pygame.image.load("Sprites/beam.png")
 
 # Creates a controllable player object
 class Player():
-
     def __init__(self, position_x, position_y, speed):
         self.position_x = position_x
         self.position_y = position_y
         self.speed = speed
         self.sprite = pygame.image.load("Sprites/player.png")
+        self.shoot = False
     
     def move_left(self):
         self.position_x -= self.speed 
@@ -21,17 +21,17 @@ class Player():
     def move_right(self):
         self.position_x += self.speed 
 
-    def shoot(self):
+    def fire(self):
         return Beam(self.position_x, self.position_y)
 
 class Beam():
     def __init__(self, position_x, position_y):
         self.position_x = position_x + 48
-        self.speed = self.move(position_y)
+        self.position_y = position_y
         self.sprite = pygame.image.load("Sprites/beam.png")
     
-    def move(self, position_y):
-        self.position_y = position_y - 2
+    def move(self):
+        self.position_y -= 2
 
 class Invader():
     def _init_(self, position, speed, rank):
@@ -51,15 +51,15 @@ class Invader():
             self.sprite =  pygame.image.load("Sprites/invader-1.png")
             self.score = 30
 
-def createPlayer():
-    return Player(496, 672, 0.16)
-
-player = Player(496, 672, 0.16)
+player = Player(496, 672, 0.32)
+beam = Beam(player.position_x, player.position_y)
 
 running = True
+shoot = False
+
 while running:
-    
-    beam = Beam(player.position_x, player.position_y)
+
+    print(player.shoot)
 
     for event in pygame.event.get():
             if pygame.event == pygame.QUIT:
@@ -74,7 +74,12 @@ while running:
     if keys[pygame.K_RIGHT] and player.position_x <= 920:
         player.move_right()
     if keys[pygame.K_SPACE]:
-        beam = player.shoot()
+        if player.shoot == False:
+            beam = player.fire()
+            player.shoot = True
+
+    if player.shoot and beam.position_y >= 16:
+        beam.move()    
     
     # On each cycle of the loop, need to reset background and render the player
     screen.fill((0,0,0))
